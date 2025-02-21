@@ -7,24 +7,22 @@ import java.util.*;
 
 public class ShamirSecretSharing {
 
-    // Decodes JSON values into a map of (x, y) points
+
     public static Map<Integer, BigInteger> decodeValues(JSONObject testCase) {
         Map<Integer, BigInteger> dataPoints = new HashMap<>();
 
         for (String key : testCase.keySet()) {
-            if (key.equals("keys")) continue; // Skip metadata
+            if (key.equals("keys")) continue;
 
             int x = Integer.parseInt(key);
             JSONObject valueObj = testCase.getJSONObject(key);
             int base = valueObj.getInt("base");
-            BigInteger y = new BigInteger(valueObj.getString("value"), base); // Using BigInteger
+            BigInteger y = new BigInteger(valueObj.getString("value"), base); 
 
             dataPoints.put(x, y);
         }
         return dataPoints;
     }
-
-    // Lagrange Interpolation for reconstructing the secret
     public static BigInteger lagrangeInterpolation(int[] xValues, BigInteger[] yValues) {
         BigInteger secret = BigInteger.ZERO;
 
@@ -46,7 +44,6 @@ public class ShamirSecretSharing {
         return secret;
     }
 
-    // Reads a JSON file and computes the secret
     public static BigInteger solvePolynomialFromJson(String filePath) throws IOException {
         String content = new String(Files.readAllBytes(Paths.get(filePath)));
         JSONObject testCase = new JSONObject(content);
@@ -69,7 +66,6 @@ public class ShamirSecretSharing {
         return lagrangeInterpolation(xValues, yValues);
     }
 
-    // Main function to run the test cases
     public static void main(String[] args) throws IOException {
         String[] testCaseFiles = {"testcase1.json", "testcase2.json"};
 
